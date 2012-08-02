@@ -1,0 +1,95 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level8.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level8.x","levelGeometry")
+planespaceBaker("levelGeometry")
+
+renderScript  = "lev/level8_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG23451.mp3")
+
+--
+-- Lights
+--
+lightX = 8000
+lightY = 12000
+lightZ = -1400
+
+ambientR = 0.3
+ambientG = 0.3
+ambientB = 0.3
+
+--
+-- TRIGGERS
+--
+
+addTrigger(0, 'startNewGame("lev/level9_loadscript.lev", 3)', -16505,-23924,-16854,-24522)
+
+--
+-- LEVEL MATERIALS
+--
+cementFill1 = 0
+cementFill2 = 1
+cementFill3 = 2
+cementFill4 = 3
+cautionStripe = 4
+metalOne = 6
+metalTwo = 7
+moonRock = 8
+plating = 9
+windows = 10
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+--
+-- BAD GUYS
+-- 
+addEntity("units/badassImp.lua", -3675.17, 4075.6, -12969.7)
+addEntity("units/badassImp.lua", -3069.04, 4093.01, -12820.2)
+addEntity("units/badassImp.lua", -2089.22, -5791.16, -4289.29)
+addEntity("units/badassImp.lua", -721.443, -5545.83, -4227.74)
+addEntity("units/badassSoldier.lua", -2425.11, -4469.43, -4417.08)
+addEntity("units/badassSoldier.lua", -2087.67, -4469.43, -4387.56)
+addEntity("units/badassSoldier.lua", -2545.29, -3110.68, -4441.63)
+addEntity("units/badassSoldier.lua", -2284.24, -3110.68, -4349.05)
+
+addEntity("units/badassSoldier.lua", -5661.56, 29.2816, -9345.42)
+addEntity("units/badassSoldier.lua", -4809.08, 29.0219, -9271.24)
+addEntity("units/badassImp.lua", -5351.97, 35.2971, -9489.17)
+addEntity("units/badassImp.lua", -5784.77, 37.5697, -9785.58)
+addEntity("units/badassSoldier.lua", -2337.07, -315.103, -15600.4)
+addEntity("units/badassSoldier.lua", -2352.64, -315.103, -14949.2)
+addEntity("units/badassSoldier.lua", -11094.1, 195.554, -24380)
+addEntity("units/badassSoldier.lua", -11082.4, 213.283, -24044.7)
+addEntity("units/badassImp.lua", -13785.7, 185.956, -24070.3)
+addEntity("units/badassImp.lua", -13805.3, 185.956, -24358)
+addEntity("units/badassSoldier.lua", -14448.6, 161.288, -24202.4)
+addEntity("units/crate.lua", -7381.42, 41.3761, -15171.5)
+addEntity("units/crate.lua", -7982.83, 41.1303, -15607)
+addEntity("units/crate.lua", -6677.79, 46.741, -16515.6)
+addEntity("units/crate.lua", -4268.35, 216.581, -19143.2)
+addEntity("units/crate.lua", -5987.61, 195.064, -23286.2)

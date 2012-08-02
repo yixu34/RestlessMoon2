@@ -1,0 +1,121 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level10.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level10.x","levelGeometry")
+planespaceBaker("levelGeometry")
+
+renderScript  = "lev/level10_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG23459.mp3")
+
+--
+-- YOUR CHARACTER
+--
+--addEntity("units/selena.lua", 0, 200, 50)
+
+--
+-- Lights
+--
+lightX = 0
+lightY = 1000
+lightZ = -2450
+
+ambientR = 0.4
+ambientG = 0.3
+ambientB = 0.28
+
+--
+-- LEVEL MATERIALS
+--
+
+cementFill1 = 0
+cementFill2 = 1
+chainlink = 2
+plastic = 3
+metalOne = 4
+metalTwo = 5
+plating = 6
+shelfing = 7
+windows = 8
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+--
+-- Triggers
+--
+
+
+addTrigger(2, [[addTrigger(1, "setFrameEnabled('game', 0); setFrameEnabled('credits', 1)", 2)]], 'badeLuno')
+
+function doSpeechSequence()
+	startSpeechSequence(
+		"Bade",   "Bade Luno:  Little girl, for years my kind has been oppressed \n" ..
+                           "by humans, and we have endured it all. But today this \n" ..
+                            "madness stops. Under my rule, there shall be equality \n" .. 
+                             "for all, for who are we to judge based on appearances alone? ", 13.289, 0.05, 0.55, 
+
+		"Bade",   "Bade Luno:  Have not we, whom you label “mutants,” not rendered \n" ..
+                           "your lives more comfortable? And yet we ask only for fairness \n" ..
+                            "in treatment and the chance to enjoy our lives like everyone else.", 10.507, 0.05, 0.60, 
+
+		"Bade",   "Bade Luno:  We did not choose to be created as such vile beasts, \n" .. 
+                           "yet to your creations you humans take no responsibility! And you \n" .. 
+                            "will never change, for you live only by what pleases you and your eyes…", 11.92, 0.05, 0.60, 
+
+		"Bade",   "Bade Luno:  But I, Bade Luno, cannot stand to see those around me suffer \n" ..
+                           "any longer. If it is my life you want, I dare you to do your worst. \n" .. 
+                            "But my dreams of justice are sure to live on til the last breath of my \n" ..
+                             "brethren. You cannot kill us all. You will inevitably lose the war!", 17.5, 0.05, 0.55,
+                
+                "Selena", "Selena:  Bade Luno. I am aware of the sad history you have so eloquently \n" .. 
+                           "recounted, but what you are doing today will only harm millions without \n" ..
+                            "bringing hope of any kind. If by killing you wish to erase the past or \n" ..
+                             "improve the future, you can but fail.", 13.992, 0.05, 0.55,
+
+                "Selena", "Selena:  Perhaps you are right; humans will never change in their \n" ..
+                           "perception of you. But that does not mean we cannot coexistence.", 6.723, 0.05, 0.60,
+
+                "Bade",   "Bade Luno:  Is that the hope that you are willing to fight for? To die \n" .. 
+                           "for? Let your death be testament that humanity has no hope!", 8.303, 0.05, 0.60); 
+
+end
+addTrigger(1, "doSpeechSequence()", 3)
+addTrigger(1, 'freezeEntities(82)',3)
+addTrigger(1, 'playSpeech("media/sounds/dialog/dialog_7.mp3")', 3)
+
+--
+-- BAD GUYS
+--
+
+addEntity("units/badeLuno.lua", -204.521, 239.575, -6119.24)
+addEntity("units/badassElite.lua", 2117.98, 184.892, -6208.22)
+addEntity("units/badassElite.lua", -2216.63, 190.071, -5883.44)
+addEntity("units/crate.lua", 3377.51, 174.624, -8729.26)
+addEntity("units/crate.lua", 277.715, 239.574, -10280.4)
+addEntity("units/crate.lua", -2363.75, 190.071, -8959.24)
+addEntity("units/crate.lua", -4535.53, 184.892, -3860.98)
+addEntity("units/crate.lua", -2842.06, 169.544, -3342.75)

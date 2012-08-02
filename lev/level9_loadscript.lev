@@ -1,0 +1,129 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("aiEnabled", 1)
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level9.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level9.x","levelGeometry")
+planespaceBaker("levelGeometry")
+
+renderScript  = "lev/level9_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG23451.mp3")
+
+--
+-- Lights
+--
+lightX = 8000
+lightY = 12000
+lightZ = -1400
+
+ambientR = 0.3
+ambientG = 0.3
+ambientB = 0.3
+
+emitParticlesAt("explosions",-5750,1350,-9450,8)
+emitParticlesAt("explosions",-5750,400,-9450,8)
+emitParticlesAt("explosions",-5750,-550,-9450,8)
+emitParticlesAt("explosions",-5000,1350,-9450,8)
+emitParticlesAt("explosions",-5000,400,-9450,8)
+emitParticlesAt("explosions",-5000,-550,-9450,8)
+emitParticlesAt("sparks",-5750,1300,-9450,6)
+emitParticlesAt("sparks",-5750,350,-9450,6)
+emitParticlesAt("sparks",-5750,-600,-9450,6)
+emitParticlesAt("sparks",-5000,1300,-9450,6)
+emitParticlesAt("sparks",-5000,350,-9450,6)
+emitParticlesAt("sparks",-5000,-600,-9450,6)
+--
+-- TRIGGERS
+--
+--addTrigger(0, 'startNewGame("lev/level0_loadscript.lev", 3)', 16700, -7400, 18000, -6800)
+
+--
+-- LEVEL MATERIALS
+--
+cementFill1 = 0
+cementFill2 = 1
+cementFill3 = 2
+cautionStripe = 3
+metalOne = 4
+metalTwo = 5
+plating = 6
+windows = 7
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+addTrigger(0, 'startNewGame("lev/level10_loadscript.lev", 3)', -7100, -7700, -6350, -6000)
+
+--
+-- BAD GUYS
+-- 
+addEntity("units/badassImp.lua", -639.324, 92.336, -3161.66)
+addEntity("units/badassImp.lua", 650.899, 114.986, -3168.18)
+addEntity("units/badassImp.lua", 316.084, 121.777, -2404.68)
+addEntity("units/badassImp.lua", -403.088, 104.602, -2396.45)
+addEntity("units/badassSoldier.lua", 675.926, 103.869, -1358.88)
+addEntity("units/badassSoldier.lua", 533.102, 61.5748, -1640.58)
+addEntity("units/badassSoldier.lua", -480.783, 106.071, -1452.11)
+addEntity("units/badassSoldier.lua", -674.354, 120.261, -1635.4)
+addEntity("units/badassElite.lua", -1293.19, 821.488, -4908.7)
+addEntity("units/badassElite.lua", 1297.1, 828.103, -5114.65)
+addEntity("units/badassSoldier.lua", -430.423, -2068.37, -5806.26)
+addEntity("units/badassSoldier.lua", 381.474, -2084.91, -5767.33)
+addEntity("units/crate.lua", -377.805, -2278.74, -3991.67)
+addEntity("units/crate.lua", 314.655, -2278.98, -3749.2)
+addEntity("units/crate.lua", -499.302, -2278.74, -4233.96)
+addPowerUp("RocketLauncherAmmo", -171.311, -2286.38, -4308.89)
+addPowerUp("RocketLauncherAmmo", 43.537, -2286.38, -4196.79)
+addEntity("units/crate.lua", -5812.39, -2144.72, -4406.79)
+addEntity("units/crate.lua", -5232.84, -2144.72, -4198.08)
+addEntity("units/crate.lua", -8613.49, -2421.79, -7273.89)
+addEntity("units/crate.lua", -9196.35, -2456.12, -6751.5)
+addEntity("units/crate.lua", -8733.14, -2456.12, -6935.75)
+
+addTrigger(0, 'addEntity("units/badassSoldier.lua", -14822, -2770.25, -4940.84)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassSoldier.lua", -14616.5, -2770.25, -8242.24)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassSoldier.lua", -14953.4, -2770.25, -8246.46)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassImp.lua", -14784.6, -2724.98, -7963.03)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassImp.lua", -14556, -2790.3, -4730.35)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassImp.lua", -14955.8, -2781.85, -4641.45)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassSoldier.lua", -16380.9, -1809.78, -8547.14)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassImp.lua", -16600.1, -1809.78, -8218.47)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassImp.lua", -14823, -1421.97, -4826.7)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/crate.lua", -14478.3, -1420.5, -4666.18)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/crate.lua", -14501.2, -1383.77, -5091.18)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/crate.lua", -14538.5, -1099.3, -6709.66)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassElite.lua", -16449.7, -698.458, -6559.15)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassElite.lua", -16369.5, 2243.95, -4963.11)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/badassElite.lua", -16782.3, 2241.87, -8146.79)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/crate.lua", -16893, 1972.03, -6801.57)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("Health", -16747, 1966.74, -6410.73)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("Health", -16858.7, 1969.47, -6300.62)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("Health", -17091.5, 1969.26, -6278.36)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addEntity("units/crate.lua", -13858.5, 2942.31, -6670.14)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("Health", -14144.7, 2981.66, -6871.08)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("Health", -14073.9, 2981.66, -6739.23)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("Health", -14257.2, 2981.66, -6777.09)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("RocketLauncherAmmo", -14208, 2976.55, -6242.63)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("ShotGunAmmo", -14120.9, 2976.55, -6308.88)', -14492, -6942, -13287, -6075)
+addTrigger(0, 'addPowerUp("FlamethrowerAmmo", -14285.8, 2952.11, -6243.4)', -14492, -6942, -13287, -6075)

@@ -1,0 +1,735 @@
+--
+-- LEVEL 2
+-- RENDER SCRIPT
+-- 
+-- RESTLESS MOON 2
+--
+
+--
+-- GAMEPLAY-RELATED VARIABLES
+--
+muzzleFlashTime = 0.06
+muzzleFlashCount = 0
+currWeapon = "none"
+
+dashMax = 1
+dashDelta = 0.4
+dashState = 0.1
+
+function doRenderScript()
+	
+	updateRenderState()
+	
+	renderScene()
+	
+	if not haveComputedShadows then
+--		computeShadowMap("ds10 seg1sm","levelGeometrySeg1",
+--					      0,2000,-1000,  -1200,-500,-1000,  1,0,0,
+--					      2.1,100,10000)
+--		computeShadowMap("ds10 seg2sm2","levelGeometrySeg2",
+--					    -6500,600,-6500,  -7000,500,-6000,  0,1,0,
+--					    2.4,100,10000)
+--		computeShadowMap("ds11 seg2sm3","levelGeometrySeg2",
+--					    -6500,600,-6500,  -6000,500,-7000,  0,1,0,
+--					    2.4,100,10000)
+		haveComputedShadows = true
+	end
+	
+--	renderShadows("ds10 seg1sm","levelGeometrySeg1",
+--			      0,2000,-1000,  -1200,-500,-1000,  1,0,0,
+--			      2.1,100,10000,.00045)
+--	renderShadows("ds10 seg2sm2","levelGeometrySeg2",
+--				    -6500,600,-6500,  -7000,500,-6000,  0,1,0,
+--				    2.4,100,10000,0.0004)
+--	renderShadows("ds11 seg2sm3","levelGeometrySeg2",
+--				    -6500,600,-6500,  -6000,500,-7000,  0,1,0,
+--				    2.4,100,10000,0.0004)
+	
+	renderEnemies()
+	renderWeapons()
+	renderParticleEffects()
+	renderViewspaceWeapon()
+	renderPostFX()
+	renderHUD()
+	
+	--textureToScreen("ds10 seg2sm2")
+
+
+	
+end
+
+function computeShadowMap(shadowMap,objectLayer,ex,ey,ez,tx,ty,tz,ux,uy,uz,fov,near,far)
+	
+	setRenderTarget(shadowMap)
+	clearBuffers(1,1,1,1)
+	beginScene()
+
+	setEffect("media/efx_shadowmap.fx")
+	setTechnique("CreateShadowMap")
+	
+	setViewProjection("lightViewProjMatrix",ex,ey,ez,tx,ty,tz,ux,uy,uz,fov,1,near,far)
+	
+	beginEffect()
+
+	beginPass(0)
+	renderObjectLayer(objectLayer,asphalt,catwalkGrate,
+					  cementFill1,cementFill2,chainlink,
+					  metalFill,metalShelf,silverStripe,
+					  pipes,metalFill2,metalPanel,metalSimple)
+	endPass()
+	
+	endEffect()
+	
+	endScene()
+
+	restoreScreen()
+		
+end
+
+function renderShadows(shadowMap,objectLayer,ex,ey,ez,tx,ty,tz,ux,uy,uz,fov,near,far,bias)
+
+	setEffect("media/efx_shadowmap.fx")
+	setTechnique("ApplyShadowMap")
+	
+	setTexture("shadowerImage","media/tex_sfx_shadower.jpg")
+	setDynamicTexture("shadowMap",shadowMap)
+	
+	setViewProjection("lightViewProjMatrix",ex,ey,ez,tx,ty,tz,ux,uy,uz,fov,1,near,far)
+	
+	setFloat("bias",bias)
+	
+	beginEffect()
+	
+	beginPass(0)
+	renderObjectLayer(objectLayer,asphalt,catwalkGrate,
+	                  cementFill1,cementFill2,chainlink,
+	                  metalFill,metalShelf,silverStripe,
+	                  pipes,metalFill2,metalPanel,metalSimple)
+	endPass()
+	
+	endEffect()
+	
+end
+
+function textureToTexture(sourceTex,destTex)
+
+	setRenderTarget(destTex)
+	beginScene()
+	
+	setEffect("media/efx_postprocess.fx")
+	setDynamicTexture("sourceTexture",sourceTex)
+	setTechnique("renderOver")
+	
+	beginEffect()
+	beginPass(0)
+		renderQuad(-1,1,-1,1)
+	endPass()
+	endEffect()
+	
+	endScene()
+	
+end
+
+function textureToScreen(sourceTex)
+	
+	setEffect("media/efx_postprocess.fx")
+	setDynamicTexture("sourceTexture",sourceTex)
+	setTechnique("renderOver")
+	
+	beginEffect()
+	beginPass(0)
+		renderQuad(-1,1,-1,1)
+	endPass()
+	endEffect()
+	
+end
+
+--
+-- Renders the scene onto whatever render target is active
+--
+function renderScene()
+
+	-- The bone matrix name in all HLSL effects
+	setBoneMatricesName("boneMatrixArray")
+
+	renderSkybox()
+	renderCharacters()
+	renderProps()
+	--              position         color            ambient       pass
+	renderLightPass( "levelGeometrySeg1", -250, 300,-1100,  0.95,0.95,0.95,  0.4,0.4,0.4)
+	renderLightPass( "levelGeometrySeg2", -1000, 7000,-6300,  0.5,0.5,0.5,  0.2,0.2,0.2)
+	
+end
+
+-- Renders a single light pass
+-- passNumber 0 for first time light pass
+-- passNumber 1 for any secondary pass
+-- also recommended that ambient terms be set to 0
+--  for secondary passes
+function renderLightPass(objectLayer,
+                         positionX,positionY,positionZ,
+                         colorR,colorG,colorB,
+                         ambientR,ambientG,ambientB)
+                         
+	setEffect("media/efx_lightingmodels.fx")
+	setViewInverse("viewInverseMatrix")
+	
+	setVector("lightPosition",positionX,positionY,positionZ)
+	setVector("lightColor",colorR,colorG,colorB)
+	setVector("ambientColor",ambientR,ambientG,ambientB)
+	
+	setTechnique("PointLambertianTexture")
+	beginEffect()
+	
+	--
+	-- Render Cement Fill 1
+	--
+	setTexture("diffuseTexture","media/tex_lev_fill_concreteA.jpg")
+	setFloat("frequencyModulator",0.0009)
+	beginPass(0)
+		renderObjectLayer(objectLayer,cementFill1)
+	endPass()
+	
+	--
+	-- Render Chainlink
+	--
+	setTexture("diffuseTexture","media/tex_lev_chainlink.png")
+	setFloat("frequencyModulator",0.015)
+	-- 2 + passNumber indicates alpha-reference texture application
+	beginPass(1)
+		renderObjectLayer(objectLayer,chainlink)
+	endPass()
+	
+	--
+	-- Render Catwalk Grate
+	--
+	setTexture("diffuseTexture","media/tex_lev_catwalk.png")
+	setFloat("frequencyModulator",0.004)
+	-- 2 + passNumber indicates alpha-reference texture application
+	beginPass(1)
+		renderObjectLayer(objectLayer,catwalkGrate)
+	endPass()
+	
+	endEffect()
+	
+	setTechnique("PointPhongTexture")
+	
+	beginEffect()
+	--
+	-- Render Metal Fill
+	--
+	setTexture("diffuseTexture","media/tex_lev_fill_metalA.jpg")
+	setVector("specularColor",0.5,0.5,0.5)
+	setFloat("specularPower",16)
+	setFloat("frequencyModulator",0.015)
+	beginPass(0)
+		renderObjectLayer(objectLayer,metalFill)
+	endPass()
+	
+	--
+	-- Render Simple Metal
+	--
+	setVector("specularColor",0.5,0.5,0.5)
+	beginPass(0)
+		renderObjectLayer(objectLayer,metalSimple,silverStripe)
+	endPass()
+	
+	setVector("specularColor",1,1,1)
+	setFloat("specularPower",4)
+	beginPass(0)
+		renderObjectLayer(objectLayer,metalPanel)
+	endPass()
+	
+	--
+	-- Render Metal Fill 2
+	setVector("specularColor",2,2,2)
+	setFloat("specularPower",16)
+	setFloat("frequencyModulator",0.015)
+	beginPass(0)
+		renderObjectLayer(objectLayer,metalFill2)
+	endPass()
+	
+	endEffect()
+	
+	setTechnique("PointNormalTexture")
+	beginEffect()
+	
+	--
+	-- Render Cement Fill 2
+	--
+	setTexture("diffuseTexture","media/tex_lev_fill_concreteB.jpg")
+	setTexture("normalTexture","media/tex_lev_roughness_normap.bmp")
+	setVector("specularColor",2.3,2.3,2.3)
+	setFloat("specularPower",32)
+	setFloat("frequencyModulator",0.0025)
+	setFloat("bumpiness",0.7)
+	beginPass(1)
+		renderObjectLayer(objectLayer,cementFill2)
+	endPass()
+	
+	--
+	-- Render Metal Shelfing
+	--
+	setTexture("diffuseTexture","media/tex_lev_fill_metalB.jpg")
+	setTexture("normalTexture","media/tex_lev_floorpattern1_normap.bmp")
+	setFloat("specularColor",2,2,2)
+	setFloat("bumpiness",16)
+	beginPass(0)
+		renderObjectLayer(objectLayer,metalShelf)
+	endPass()
+	
+	--
+	-- Render Aslphalt
+	--
+	setTexture("diffuseTexture","media/tex_lev_fill_asphalt.jpg")
+	setTexture("normalTexture","media/tex_lev_roughness2_normap.bmp")
+	setVector("specularColor",1,1,1)
+	setFloat("bumpiness",6)
+	beginPass(0)
+		renderObjectLayer(objectLayer,asphalt)
+	endPass()
+	
+	endEffect()
+	
+	endEffect()
+	setEffect("media/efx_special.fx")
+	setTechnique("Glass")
+	beginEffect()
+	
+	--
+	-- Render Glass
+	--
+	setVector("lightPosition",positionX,positionY,positionZ)
+	setVector("specularColor",2,2,2)
+	setFloat("specularPower",1.5)
+
+	beginPass(0)
+	renderObjectLayer(objectLayer,glass)
+	endPass()
+	endEffect()
+	setTechnique("LightBeam")
+	beginEffect()
+	
+	--
+	-- Render Light Beams
+	--
+	setTexture("lightBeamTexture","media/tex_sfx_lightbeam.jpg")
+	setVector("lightBeamColor",1,1,1,1)
+	beginPass(0)
+	renderObjectLayer(objectLayer,lightBeams)
+	endPass()
+	endEffect()
+
+end
+
+function renderCharacters()
+
+	--
+	-- Render characters
+	-- TODO: Weapon shader
+	--
+--	setEffect("media/efx_dynamic_reflective.fx")
+--	setBoneMatricesName("boneMatrixArray")
+--	setInt("influences",2)
+--	setTexture("tDiffuse", "media/tex_char_selena_difmap.jpg")
+--	setVector("diffModulation",1,1,1,1)
+--	setTexture("tReflection","media/tex_char_selena_refmap.jpg")
+--	setVector("specModulation",20,10,5,1)
+--	setTexture("tEnvironment","media/tex_etc_fuelcell_difmap.jpg")
+--	setInt("power",64)
+--	setVector("halfVector",0,0,-1)
+--	setVector("lightDirection",0,0,-1);
+
+--	beginEffect()
+--	beginPass(0)
+--		renderObjectLayer("Selena")
+--	endPass()
+--	endEffect()
+	
+end
+
+function renderProps()
+
+	--
+	-- Render shiny non-moving objects
+	--
+	setEffect("media/efx_static_reflective.fx")
+	setVector("halfVector",0,0,-1)
+	setVector("specModulation",30,20,10,1)
+	setVector("reflModulation",0.2,0.2,0.2,1)
+	setVector("diffModulation",0.4,0.4,0.4,1)
+	setInt("power",32)
+	setTexture("blendDiffuse","media/tex_etc_crate_difmap.jpg")
+	setTexture("blendReflection","media/tex_etc_crate_refmap.jpg")
+	setTexture("blendEnvironment","media/tex_etc_fuelcell_difmap.jpg")
+
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("crate")
+		renderObjectLayer("Health")
+		renderObjectLayer("BattleRifleAmmo")
+		renderObjectLayer("RocketLauncherAmmo")
+		renderObjectLayer("ShotGunAmmo")
+		renderObjectLayer("GrenadeAmmo")
+		renderObjectLayer("FlamethrowerAmmo")
+		endPass()
+	endEffect()
+	
+end
+
+function renderWeapons()
+
+	-- Render battle rifle bullets
+	-- TODO: Rewrite shader
+	--
+	setEffect("media/efx_tracerbullet.fx")
+	setTechnique("Bullet")
+	setVector("bulletColor",1,0.8,0.6,1)
+
+	-- Do a pass
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("Battle Rifle")
+	endPass()
+	endEffect()
+	
+	beginEffect()
+	beginPass(0)
+			renderObjectLayer("EliteWeapon")
+	endPass()
+	endEffect()
+	
+	--TODO: some weapon stuff
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("Grenade")
+	endPass()
+	endEffect()
+	
+	--TODO: some weapon stuff
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("Rocket Launcher")
+	endPass()
+	endEffect()
+	
+	--TODO: some weapon stuff
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("Shotgun")
+	endPass()
+	endEffect()
+
+	--TODO: some weapon stuff
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("ImpWeapon")
+	endPass()
+	endEffect()
+
+	--TODO: some weapon stuff
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("SoldierWeapon")
+	endPass()
+	endEffect()
+	
+	setTechnique("Flamer")
+	setTexture("fireTexture","media/tex_sfx_fire.jpg")
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("Flamethrower")
+	endPass()
+	endEffect()
+	
+end
+
+function renderSkybox()
+
+	--
+	-- Render the skybox
+	-- TODO: increase efficiency by avoiding clearing the
+	--       color and z-buffers
+	--
+	setEffect("media/efx_skybox.fx")
+	setTexture("skyboxTexture", "media/tex_etc_skybox.jpg")
+	setTechnique("t0")
+
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("skybox")
+	endPass()
+	endEffect()
+	
+end
+
+function renderViewspaceWeapon()
+
+	clearZBuffer()
+
+	setEffect("media/efx_viewspace.fx")
+	setBoneMatricesName("boneMatrixArray")
+	setViewInverse("viewInverseMatrix")
+	setProjection("projectionMatrix",1.0,1.333,1.0,1000.0)
+	setInt("influences",1)
+	
+	setVector("ambientColor",0.1,0.1,0.1,1.0)
+	setVector("lightPosition",0,1000,0)
+	
+	setTexture("diffuseTexture","media/tex_firstperson_arm_dif.jpg")
+	setCubeTexture("environmentTexture","LobbyCube.dds")
+
+	setVector("specularColor",0.1,0.1,0.11,0)
+	setFloat("minPower",16.0)
+	setFloat("rangePower",0.0)
+
+	setTechnique("SimpleGlossMap")
+	
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("Selena",arm)
+	endPass()
+	endEffect()
+	
+	if currWeapon == "Rocket Launcher" then
+	
+		setTechnique("AdvancedGlossMap")
+	
+		setTexture("diffuseTexture","media/tex_wep_rlauncher_difmap.jpg")
+		setTexture("glossTexture","media/tex_wep_rlauncher_glossmap.jpg")
+
+		setVector("specularColor",6.5,6.5,6.6,0)
+		setFloat("minPower",32.0)
+		setFloat("rangePower",0.0)
+		
+		beginEffect()
+		beginPass(0)
+			renderObjectLayer("Selena",rocketLauncher)
+		endPass()
+		endEffect()
+		
+		setTechnique("Scope")
+		setVector("scopeColor",1,0.5,0)
+		beginEffect()
+		beginPass(0)
+			renderObjectLayer("Selena",rocketLauncherScope)
+		endPass()
+		endEffect()
+		
+	elseif currWeapon == "Flamethrower" then
+	
+		setTechnique("AdvancedGlossMap")
+	
+		setTexture("diffuseTexture","media/tex_wep_rlauncher_difmap.jpg")
+		setTexture("glossTexture","media/tex_wep_rlauncher_glossmap.jpg")
+
+		setVector("specularColor",6.5,6.5,6.6,0)
+		setFloat("minPower",32.0)
+		setFloat("rangePower",0.0)
+		
+		beginEffect()
+		beginPass(0)
+			renderObjectLayer("Selena",flameThrower)
+		endPass()
+		endEffect()
+	
+	elseif currWeapon == "Battle Rifle" or currWeapon == "Shotgun" then
+	
+		setTechnique("AdvancedGlossMap")
+	
+		setTexture("diffuseTexture","media/tex_wep_brifle_difmap.jpg")
+		setTexture("glossTexture","media/tex_wep_brifle_glossmap.jpg")
+
+		setVector("specularColor",6.5,6.5,6.6,0)
+		setFloat("minPower",16.0)
+		setFloat("rangePower",0.0)
+		
+		beginEffect()
+		beginPass(0)
+			renderObjectLayer("Selena",battleRifle)
+		endPass()
+		endEffect()
+		
+		setTechnique("Scope")
+		setVector("scopeColor",0,0.7,0)
+		beginEffect()
+		beginPass(0)
+			renderObjectLayer("Selena",battleRifleScope)
+		endPass()
+		endEffect()
+		
+		if muzzleFlashCount < muzzleFlashTime then
+			setTexture("flashTexture","media/tex_sfx_muzzleflash.jpg")
+		
+			setTechnique("MuzzleFlash")
+			
+			beginEffect()
+			beginPass(0)
+				renderObjectLayer("Selena",muzzleFlash);
+			endPass()
+			endEffect()
+		end
+	end
+	
+end
+
+function renderHUD()
+
+	setEffect("media/efx_hud.fx")
+	setTexture("hudTexture","media/tex_hud_bkgnd.png")
+	setTechnique("renderHUD")
+	
+	beginEffect()
+	
+	beginPass(0)
+		renderQuad(-1,1,-1,1)
+	endPass()
+	
+	endEffect()
+	
+	setTexture("hudTexture","media/tex_hud_healthbar.png")
+	setTechnique("renderBar")
+	setVector("minPosition",-0.57,-1)
+	setVector("maxPosition",-0.27,-0.76)
+	health = getRenderNumber("health")
+	setFloat("barAmount",health/100)
+	beginEffect()
+	beginPass(0)
+		renderQuad(0,1,0,1)
+	endPass()
+	endEffect()
+
+end
+
+function renderPostFX()
+
+	if dashState > 0 then
+	
+		setEffect("media/efx_postprocess.fx")
+		setTechnique("dashMagic")
+	
+		setTexture("sourceTexture","media/tex_sfx_dashmagic.jpg")
+		setFloat("alpha",dashState)
+	
+		beginEffect()
+	
+		beginPass(0)
+			renderQuad(-1,1,-1,1)
+		endPass()
+	
+		endEffect()
+	end
+	
+end
+
+function renderParticleEffects()
+
+	--
+	-- Render particles
+	--
+	setEffect("media/efx_explosions.fx")
+	setTechnique("t0")
+
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("explosions")
+	endPass()
+	endEffect()
+	
+	--
+	-- Render blood
+	--
+	setEffect("media/efx_blood.fx")
+    setTechnique("t0")
+
+    beginEffect()
+    beginPass(0)
+		renderObjectLayer("blood")
+    endPass()
+    endEffect()
+	
+end
+
+function renderEnemies()
+
+	--
+	-- Render characters
+	--
+	setEffect("media/efx_characters.fx")
+	setCubeTexture("environmentTexture","LobbyCube.dds")
+	setVector("lightPosition",0,10000,0)
+	setVector("lightColor",1,1,1)
+
+	setTechnique("reflectNoTex")
+	setVector("ambientColor",0.04,0.04,0.04)
+	setVector("diffuseColor",0.5,0.5,0.5)
+	setVector("specularColor",7,7,6.7)
+	setFloat("specularPower",32)
+	setFloat("reflectivity",0.3)
+	beginEffect()
+	beginPass(0)
+		renderObjectLayer("Soldier",0,1,2,3,4)
+		renderObjectLayer("Imp",0,1,2,3,4)
+		renderObjectLayer("Elite",0)
+	endPass()
+	setVector("ambientColor",0.01,0.01,0.01)
+	setVector("diffuseColor",0.1,0.1,0.1)
+	setVector("specularColor",10,10,10)
+	setFloat("specularPower",32)
+	setFloat("reflectivity",0.5)
+	beginPass(0)
+		renderObjectLayer("Elite",4)
+	endPass()
+	endEffect()
+	
+	setTechnique("phongNoTex")
+	beginEffect()
+	setVector("ambientColor",1,0,0)
+	setVector("diffuseColor",0.0,0.0,0.0)
+	setVector("specularColor",1,1,1)
+	setFloat("specularPower",64)
+	beginPass(0)
+		renderObjectLayer("Elite",1)
+	endPass()
+	setVector("ambientColor",0.05,0.05,0.1)
+	setVector("diffuseColor",0.1,0.25,0.4)
+	setVector("specularColor",1,1,1)
+	setFloat("specularPower",64)
+	beginPass(0)
+		renderObjectLayer("Elite",3)
+	endPass()
+	endEffect()
+	
+	setTechnique("lambertianNoTex")
+	beginEffect()
+	setVector("ambientColor",0.05,0.05,0.05)
+	setVector("diffuseColor",0.2,0.2,0.2)
+	-- Render selena (named tiny from her predecessor)
+	beginPass(0)
+		renderObjectLayer("Elite",2)
+	endPass()
+	endEffect()
+	
+end
+
+	
+
+function updateRenderState()
+
+	if getRenderNumber("isShooting") == 1 then
+		muzzleFlashCount = 0
+	else
+		muzzleFlashCount = muzzleFlashCount + getDtSec()
+	end
+	
+	dashTimer = getRenderNumber("dashTimer")
+	if dashCooldown == 0 then
+		dashState = dashMax
+	end
+	if dashState > 0 then
+		dashState = dashState - dashDelta*getDtSec()
+	end
+	
+	currWeapon = getRenderString("weapon")
+	
+end

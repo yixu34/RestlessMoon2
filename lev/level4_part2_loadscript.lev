@@ -1,0 +1,120 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level4_part2.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level4_part2.x","levelGeometry")
+planespaceBaker("levelGeometry")
+
+renderScript  = "lev/level4_part2_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG19622.mp3")
+playMusicOnce("media/music/NG23459.mp3")
+
+--
+-- Lights
+--
+lightX = 0
+lightY = 8000
+lightZ = -4000
+
+ambientR = 0.2
+ambientG = 0.2
+ambientB = 0.2
+
+--
+-- TRIGGERS
+--
+addTrigger(0, 'startNewGame("lev/level5_loadscript.lev", 3)', -3000, -8400, -2100, -7500)
+
+--
+-- LEVEL MATERIALS
+--
+cementFill1 = 0
+cementFill2 = 1
+chainlink = 3
+metalOne = 4 
+metalTwo = 5
+plating = 6
+windows = 7
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+--
+-- BAD GUYS
+--
+addEntity("units/crate.lua", -5265.53, 178.808, 526.106)
+addEntity("units/crate.lua", -5126.6, 178.954, 211.834)
+addPowerUp("FlamethrowerAmmo", -5659.19, 179.045, 403.27)
+addEntity("units/crate.lua", -4181.09, 182.965, -1269.11)
+addEntity("units/crate.lua", -3996.88, 182.806, -1179.56)
+addEntity("units/crate.lua", -1337.78, 184.228, -3219.43)
+addEntity("units/crate.lua", 904.524, 197.662, -1345.8)
+addEntity("units/toughSoldier.lua", 1826.29, 186.038, -4810.41)
+addEntity("units/toughImp.lua", -1925.97, 3923.99, -1362.95)
+addEntity("units/crate.lua", 1955.91, 2933.18, 2327.19)
+addEntity("units/crate.lua", 4238.32, 2914.57, 1019.52)
+addEntity("units/crate.lua", 6069.52, 3282, 1352.86)
+addEntity("units/toughSoldier.lua", 4319.46, 3657.63, 2211.99)
+addEntity("units/toughSoldier.lua", 4373, 3642.62, 2816.86)
+addEntity("units/toughSoldier.lua", -1523.76, 4859.76, 621.852)
+addEntity("units/toughSoldier.lua", -1142.12, 4859.76, 636.62)
+addEntity("units/toughElite.lua", 2278.16, 176.857, -4914.25)
+addPowerUp("Health", 1708.25, 185.741, -2659.83)
+addPowerUp("Health", 1924.28, 160.837, -2595.02)
+addEntity("units/crate.lua", 2045.13, 210.186, -2713.84)
+
+elite1 = addEntity("units/toughElite.lua", -1900, 207.047, -4900)
+elite1WP1 = addWayPoint(-3600,-27,-5070)
+elite1WP2 = addWayPoint(-1900,-27,-4900)
+
+function elite1Patrol()
+setPath(elite1,elite1WP1,elite1WP2,'elite1Patrol()')
+end
+elite1Patrol()
+
+
+elite2 = addEntity("units/toughElite.lua", 3142.23, 176.857, -4327.65)
+elite2WP1 = addWayPoint(3100,-27,-5000)
+elite2WP2 = addWayPoint(3400,-27,-3500)
+
+function elite2Patrol()
+setPath(elite2,elite2WP1,elite2WP2,'elite2Patrol()')
+end
+elite2Patrol()
+
+addEntity("units/toughSoldier.lua", -2912.66, 2913.83, 1612.4)
+addEntity("units/toughImp.lua", -2724.76, 2913.83, 2114.56)
+addEntity("units/crate.lua", -4128.45, 2432.41, 2264.34)
+addEntity("units/crate.lua", -4165.03, 2432.41, 2013.51)
+addEntity("units/crate.lua", -6646.47, 2413.02, -6604.99)
+addEntity("units/crate.lua", -2989.95, 2920.54, 306.924)
+addEntity("units/crate.lua", -3657.95, 4807.9, 2270.73)
+addEntity("units/toughSoldier.lua", -1388.03, 4813.64, 1829.34)
+addEntity("units/toughElite.lua", 728.514, 5223.22, -7093.19)
+addEntity("units/toughImp.lua", 748.388, 5223.22, -7803.44)
+addEntity("units/toughImp.lua", 847.976, 5223.22, -8119.16)
+addEntity("units/crate.lua", 3543.78, 5160.95, -6579.54)
+addEntity("units/crate.lua", -3470.07, 5186.38, -7319.69)

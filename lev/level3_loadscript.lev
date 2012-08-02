@@ -1,0 +1,120 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG16996.mp3")
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level3_collision.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level3_a.x","levelGeometry")
+addRenderable("lev/level3_b.x","sm1Geometry")
+planespaceBaker("levelGeometry")
+planespaceBaker("sm1Geometry")
+
+--
+-- Lights
+--
+lightX = 0
+lightY = 10000
+lightZ = 0
+
+ambientR = 0.37
+ambientG = 0.35
+ambientB = 0.32
+
+--
+-- TRIGGERS
+--
+addTrigger(0, 'startNewGame("lev/level4_part1_loadscript.lev", 3)', -8350, 850, -7550, 1650)
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+renderScript  = "lev/level3_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+--
+-- LEVEL MATERIALS
+--
+cautionStripe = 0
+cementFill1 = 1
+cementFill2 = 2
+cementFill3 = 3
+grating = 4
+metalOne = 5
+metalTwo = 6
+metalThree = 7
+plating = 8
+windows = 9
+
+--
+-- SHADOW MAP STATUS
+--
+haveComputedShadows = false
+
+--
+-- Spawn a few baddies when selena gets through the shadowmapped room
+--
+addTrigger(0, 'addEntity("units/imp.lua", -5547.18, -769.63, 1340.11)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/imp.lua", -5412.95, -769.66, 971.969)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/soldier.lua", -5698.15, -781.698, 988.492)', -5950, 2450, -3750, 3130)
+-- 
+--
+-- These guys are around in the beginning
+--
+addEntity("units/elite.lua", -3248.37, 64.5943, -1656.11)
+addEntity("units/elite.lua", -3029.51, 64.7311, -2256.18)
+addEntity("units/soldier.lua", -2159.35, 109.47, -2738.78)
+addEntity("units/soldier.lua", -2062.53, 109.665, -1338.27)
+addEntity("units/soldier.lua", -793.005, 118.401, -1293.2)
+addEntity("units/soldier.lua", 849.022, 122.454, -1322.46)
+addEntity("units/imp.lua", 1324.17, -319.219, 477.574)
+addEntity("units/imp.lua", 1175.15, -319.219, -13.8646)
+addEntity("units/imp.lua", 1345.22, -291.82, -4560.14)
+-- --
+-- These guys will show up halfway through the level
+--
+addTrigger(0, 'addEntity("units/elite.lua", -4414.37, -1650.52, 303.893)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/toughImp.lua", -4177.23, -1683.56, -2308.16)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/toughImp.lua", -3765.46, -1683.56, -1973.54)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/toughImp.lua", -8739.78, -2583.16, 28.4137)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/toughImp.lua", -8496.41, -2583.16, -646.52)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/toughSoldier.lua", -9540.34, -2583.16, -495.717)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/toughSoldier.lua", -9111.91, -2583.16, -586.478)', -5950, 2450, -3750, 3130)
+addTrigger(0, 'addEntity("units/toughSoldier.lua", -9055.69, -2583.16, 83.1286)', -5950, 2450, -3750, 3130) --
+-- Get some.
+--
+addEntity("units/crate.lua", 365.069, 132.417, -458.482)
+addEntity("units/crate.lua", -412.951, 132.417, -753.397)
+addPowerUp("Health", 1492.58, -329.498, 233.837)
+addPowerUp("Health", 1323.48, -308.698, 244.742)
+addPowerUp("ShotGunAmmo", 1434, -310.25, -4259.63)
+addPowerUp("ShotGunAmmo", 1275.51, -340.355, -4301.42)
+addPowerUp("Health", -437.373, 87.9678, -501.604)
+addEntity("units/crate.lua", -4666.05, -790.669, 920.548)
+addEntity("units/crate.lua", -5150.12, -810.882, 3882.31)
+addEntity("units/crate.lua", -7352.6, -2593.52, 531.912)
+addEntity("units/crate.lua", -7575.01, -2593.52, 142.077)
+addPowerUp("ShotGunAmmo", -7279.64, -2609.28, 266.94)
+addEntity("units/imp.lua", -5587.09, -1260.31, 5391.27)
+addEntity("units/soldier.lua", -9531.42, -2602.92, -2411.53)
+addEntity("units/soldier.lua", -6579.55, -2580.15, -2440.45)

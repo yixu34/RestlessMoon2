@@ -1,0 +1,155 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level5_part1_collision.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level5_part1_a.x","levelGeometry")
+addRenderable("lev/level5_part1_b.x","sm1Geometry")
+planespaceBaker("levelGeometry")
+planespaceBaker("sm1Geometry")
+
+--
+-- Lights
+--
+lightX = 0
+lightY = 10000
+lightZ = 0
+
+ambientR = 0.37
+ambientG = 0.35
+ambientB = 0.32
+
+--
+-- TRIGGERS
+--
+addTrigger(0, 'startNewGame("lev/level6_loadscript.lev", 3)', -5400, -3200, -4550, -2500)
+
+function doSpeechSequence()
+	startSpeechSequence(
+		"Alex", "Alexander:  I'm in.", 0.638, 0.05, 0.6, 
+
+		"Selena", "Selena:  Now's not the time, I'm surrounded!", 3, 0.05, 0.6, 
+
+		"Alex", "Alexander:  Hang in there, I'm coming.", 1.63, 0.05, 0.6, 
+
+		"Nobody", "", 0.05, 0.05, 0.6, 
+		
+        	"Alex", "Alexander:  Selena, break off!  This whole operation is a \n" ..
+		        "god damned setup!  I've just been ambushed!", 5.2, 0.05, 0.6, 
+
+		"Selena", "Selena:  No!", 1.1, 0.05, 0.6, 
+
+		"Alex", "Alexander:  That bastard Tyrell must have leaked all our \n" ..
+		        "plans to Bade Luno!  That's how the mutants knew to evacuate \n" ..
+				"Site Alpha.", 8.243, 0.05, 0.6, 
+
+		"Selena", "Selena:  Alexander!  Don't die on me!", 1.87, 0.05, 0.6, 
+
+		"Alex", "Alexander:  Selena...know that...no matter how far, I will \n" .. 
+		        "always love you.  (static)", 6.47, 0.05, 0.6, 
+
+		"Selena", "Selena:  Alex!!!", 1.5, 0.05, 0.6);
+end
+
+addTrigger(0, "doSpeechSequence()", 3627, 300, 2888, -400)
+--addTrigger(0, 'freezeEntities(29)', 3627, 300, 2888, -400)
+addTrigger(0, 'playSpeech("media/sounds/dialog/dialog_4.mp3")', 3627, 300, 2888, -400)
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+renderScript  = "lev/level5_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG19622.mp3")
+
+--
+-- YOUR CHARACTER
+--
+--addEntity("units/selena.lua", 0, 200, 50)
+
+--
+-- LEVEL MATERIALS
+--
+chainlink = 0
+cementFill1 = 1
+cementFill2 = 2
+cementFill3 = 3
+metalOne = 4
+metalTwo = 5
+plating = 6
+windows = 7
+
+--
+-- DYNAMIC IMAGE BUFFER DECLARATION
+--
+baseImageBuffer = "-s10 Base Image";
+shadowMap = "ds11 Shadow Map";
+shadowComposite = "-s10 Composite Shadow";
+
+--
+-- SHADOW MAP STATUS
+--
+haveComputedShadows = false
+
+--
+-- BAD GUYS
+--
+set("aiEnabled","true")
+addEntity("units/crate.lua", 285.665, 283.561, -2080.93) 
+addEntity("units/crate.lua", 285.665, 283.561, -1902.32) 
+addEntity("units/crate.lua", 285.665, 283.362, -1729.28) 
+addEntity("units/crate.lua", -344.638, 283.391, -2208.09) 
+addEntity("units/crate.lua", -344.638, 283.28, -2034.18) 
+addEntity("units/crate.lua", -344.638, 283.561, -1821.06)  
+addEntity("units/toughSoldier.lua", 1179.78, 223.808, -3142.73) 
+addEntity("units/toughSoldier.lua", 1373.34, 223.746, -2940.5)  
+addEntity("units/toughElite.lua", 4023.24, 223.183, -3092.64) 
+addEntity("units/crate.lua", 4834.47, 227.081, 2164.61) 
+addEntity("units/crate.lua", 4727.2, 227.081, 2429.49) 
+addEntity("units/crate.lua", 5119.9, 227.081, 2050.39) 
+addEntity("units/crate.lua", 5158.3, 227.081, 2455.5) 
+addEntity("units/crate.lua", 6108.2, 227.081, 2031.76) 
+addEntity("units/crate.lua", 6108.45, 227.081, 2302.36) 
+addEntity("units/crate.lua", 6108.23, 227.081, 2586.41) 
+addEntity("units/crate.lua", 5759.01, 227.009, 1936.22) 
+addEntity("units/crate.lua", 5787.58, 227.081, 2237.64) 
+addEntity("units/crate.lua", 5818.69, 227.081, 2564.49) 
+addEntity("units/crate.lua", 5446.02, 227.081, 1897.82) 
+addEntity("units/crate.lua", 5483.58, 226.829, 2294.01)  
+addEntity("units/toughImp.lua", -1047.1, -661.585, 819.916) 
+addEntity("units/toughImp.lua", -1039.22, -661.585, 567.606) 
+addEntity("units/toughImp.lua", -1035.62, -661.585, 142.138) 
+addEntity("units/toughSoldier.lua", -1740.65, -674.888, 827.016) 
+addEntity("units/toughSoldier.lua", -1704.85, -674.888, 166.615)  
+addEntity("units/toughElite.lua", -7.11281, -675.667, -59.6703)  
+addEntity("units/toughSoldier.lua", -6146.28, -893.352, 189.347) 
+addEntity("units/toughSoldier.lua", -7406.93, -893.352, 162.474) 
+addEntity("units/toughImp.lua", -6274.37, -1605.05, -2356.81) 
+addEntity("units/toughImp.lua", -7204.1, -1605.05, -2312.84) 
+addEntity("units/toughImp.lua", -7449.61, -1605.05, -1410.38) 
+addEntity("units/toughSoldier.lua", -9733.3, -1170.98, -2335.93)
+
+addEntity("units/crate.lua", 708.163, -750.819, 801.595)
+addEntity("units/crate.lua", 759.063, -745.631, 608.514)
+addEntity("units/toughElite.lua", -6865.87, -1598.31, -3198.41)

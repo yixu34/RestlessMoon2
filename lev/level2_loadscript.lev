@@ -1,0 +1,123 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG16996.mp3")
+
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level2_collision.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level2_a.x","levelGeometry")
+addRenderable("lev/level2_b.x","sm1Geometry")
+planespaceBaker("levelGeometry")
+planespaceBaker("sm1Geometry")
+
+--
+-- Lights
+--
+lightX = 0
+lightY = 10000
+lightZ = 0
+
+ambientR = 0.37
+ambientG = 0.35
+ambientB = 0.32
+
+--
+-- TRIGGERS
+--
+addTrigger(0, 'startNewGame("lev/level3_loadscript.lev", 3)', -3900, -2100, -3450, -950)
+
+--3.5
+--2.47
+--2.867
+--0.941
+--1.441
+
+function doSpeechSequence()
+	startSpeechSequence(
+		"Alex", "Alexander:  Selena, the commander briefed me on your crash.\n" ..
+		        "Any injuries?", 3.5, 0.05, 0.6, 
+
+		"Selena", "Selena:  No, I assure you I am not hurt.", 2.47, 0.05, 0.6, 
+
+		"Alex", "Alexander:  I will inspect you -personally- tonight.", 2.867, 0.05, 0.6, 
+
+		"Selena", "Selena:  You pig!", 0.941, 0.05, 0.6, 
+		"Alex", "Alexander:  (Laughs)", 1.441, 0.05, 0.6)
+end
+
+addTrigger(1, "doSpeechSequence()", 2)
+addTrigger(1, 'playSpeech("media/sounds/dialog/dialog_2.mp3")', 2)
+--addTrigger(1, 'freezeEntities(11)',2)
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+renderScript  = "lev/level2_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+--
+-- LEVEL MATERIALS
+--
+cautionStripe = 0
+cementFill1 = 1
+cementFill2 = 2
+chainlink = 3
+cementFill3 = 4
+metalOne = 5
+metalTwo = 6
+metalThree = 7
+plating = 8
+windows = 9
+
+--
+-- SHADOW MAP STATUS
+--
+haveComputedShadows = false
+addPowerUp("RocketLauncherAmmo", -1419.67, 190.152, -3242.28) 
+addEntity("units/crate.lua", -1328.52, 190.036, -2781.44) 
+addEntity("units/crate.lua", 1232.669, 197.582, -2435.37) 
+addEntity("units/crate.lua", 1279.963, 197.582, -1785.03) 
+addEntity("units/crate.lua", 818.55, 176.254, -3372.66) 
+addEntity("units/crate.lua", 480.929, -621.018, -2648.34) 
+addEntity("units/crate.lua", 991.768, -603.083, -5172.49) 
+addEntity("units/crate.lua", 4714.47, -449.232, -6195.03)
+addEntity("units/crate.lua", 4638.39, -450.665, -5993.86)
+addEntity("units/crate.lua", 4006.49, -465.334, -4274.47)
+addEntity("units/crate.lua", -2774.05, -1113.04, -4131.59)
+
+addPowerUp("GrenadeAmmo", 911.475, -678.926, -5437.95)
+
+addEntity("units/imp.lua", 424.291, -568.969, -3433.55)
+addEntity("units/imp.lua", -525.114, -619.549, -3478.11)
+addEntity("units/imp.lua", 2304.91, -1132.66, -4822.42)
+addEntity("units/soldier.lua", 2509.48, -1144.67, -4948.99)
+addEntity("units/imp.lua", 2755.31, -1163.98, -4839.18)
+addEntity("units/soldier.lua", -2201.98, -1141.63, -7549.38)
+addEntity("units/soldier.lua", -1950.79, -1127.03, -7627.18)
+addEntity("units/imp.lua", -2114.92, -1160.33, -7868.5)
+addEntity("units/imp.lua", -1854.24, -1162.52, -7941.59)
+addEntity("units/imp.lua", -2251.35, -577.593, -3730.94)
+addEntity("units/soldier.lua", -3214.37, -113.832, -4833.95)
+addEntity("units/soldier.lua", -5350.95, -49.9597, -2999.29)
+addEntity("units/soldier.lua", -2862.54, -76.5452, -2739.28)
+addEntity("units/imp.lua", -2484.8, -764.384, -1617.86)

@@ -1,0 +1,149 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level7.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level7.x","levelGeometry")
+planespaceBaker("levelGeometry")
+
+renderScript  = "lev/level7_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG23459.mp3")
+
+--
+-- Lights
+--
+lightX = 0
+lightY = 3200
+lightZ = -3300
+
+ambientR = 0.3
+ambientG = 0.3
+ambientB = 0.3
+
+--
+-- TRIGGERS
+--
+--addTrigger(0, 'startNewGame("lev/level0_loadscript.lev", 3)', 16700, -7400, 18000, -6800)
+
+function doSpeechSequenceOne()
+	startSpeechSequence(
+		"Tyrell", "Tyrell:  Ah, Lieutenant. I didn't think that you would \n" ..
+			   "make it this far. But now that you have come, I have a \n" .. 
+                            "proposal for you", 6.121, 0.05, 0.6, 
+
+		"Selena", "Selena:  Lunatic! Would you have me betray the entire \n" ..
+                          "human race like you?", 3.76, 0.05, 0.6, 
+
+		"Tyrell", "Tyrell:  On the contrary, it is you and I who have been \n" ..
+                           "betrayed. You see, your precious human race is responsible \n" .. 
+                            "for creating and deceiving people of our kind. Ever \n" ..
+                             "wonder why you and I are so fast, agile, and resilent? \n" ..
+                              "It's because we, too, are mutants", 15.856, 0.05, 0.55, 
+
+		"Selena", "Selena:  No, I'm not a mutatnt! That simply cannot be!", 2.469, 0.05, 0.6, 
+		
+		"Tyrell", "Tyrell:  Oh, but is is. I've read your files; I know \n" ..
+                           "all about your past. You were only taken to Earth because \n" ..
+                            "you looked human, and they erased your memory, implanting  \n" ..
+                             "in it's place the false identity of 'Selena Clark.'", 12.947, 0.05, 0.55, 
+
+		"Tyrell", "Tyrell:  But you see, now you have a chance to change all of \n" ..
+                           "that. Come with me. Together we will dethrone Bade Luno after \n" ..
+                            "he ascends to power, and together we shall justly rule all \n" ..
+                             "of Earth and the moon!", 11.151, 0.05, 0.55, 
+
+		"Selena", "Selena:  And what about Alex?", 1.769, 0.05, 0.6, 
+
+		"Tyrell", "Tyrell:  What about him? He was always only a weak human, unable \n" ..
+                           "to survive on his own out there.", 5.2, 0.05, 0.6,
+
+                "Selena", "Selena:  So that's motive enough to kill him? Just like all the \n" ..
+                           "lives you are about to take? Only weak humans? No! They are \n" ..
+                            "those whom other we love and who have cared for us in return. \n" .. 
+                             "I will not let you kill millions for personal gain!", 13.514, 0.05, 0.55, 
+
+		"Tyrell", "Tyrell:  So be it!", 1.215, 0.05, 0.6);
+
+end
+addTrigger(1, "doSpeechSequenceOne()", 1.5)
+addTrigger(1, 'freezeEntities(73)',2)
+addTrigger(1, 'playSpeech("media/sounds/dialog/dialog_5.mp3")', 2)
+
+
+function doSpeechSequenceTwo()
+	startSpeechSequence(
+		"Bade",   "Bade Luno:  Tyrell, are we rid of those pesky humans?", 2.669, 0.05, 0.6, 
+
+		"Selena", "Selena:  Not quite, you maniac!", 2.131, 0.05, 0.6, 
+
+		"Nobody", "Computer:  Target acquired. Subject Bade Luno \n" ..
+                           "transmitting from 156.24 x 256.90.", 7.1, 0.05, 0.6, 
+
+		"Selena", "Selena:  Yes!", 0.821, 0.05, 0.6); 
+
+    setOnSpeechFinished(
+        [[addTrigger(1, "startNewGame('lev/level8_loadscript.lev', 3)", 0.2)]])
+
+end
+addTrigger(2, "doSpeechSequenceTwo()", 'Tyrell')
+addTrigger(2, 'freezeEntities(12.9)', 'Tyrell')
+addTrigger(2, 'playSpeech("media/sounds/dialog/dialog_6.mp3")', 'Tyrell')
+--addTrigger(2, [[addTrigger(1, "startNewGame('lev/level8_loadscript.lev', 3)", 13)]], 'Tyrell')
+
+
+--
+-- LEVEL MATERIALS
+--
+cementFill1 = 0
+cementFill2 = 1
+cementFill3 = 2
+cautionStripe = 3
+chainlink = 4
+metalOne = 5
+metalTwo = 6
+plating = 7
+windows = 8
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+--
+-- BAD GUYS
+-- 
+addEntity("units/crate.lua", 4692.38, 54.5536, -1503.06)
+addEntity("units/crate.lua", 4226.86, 54.2829, -1267.98)
+addEntity("units/crate.lua", 4713.18, 74.2508, -2208.87)
+addEntity("units/crate.lua", 4123.59, 74.2508, -2111.79)
+addEntity("units/tyrell.lua", 59.7792, 48.638, -5292.88)
+addEntity("units/badassSoldier.lua", -1068.33, 90.5473, -5044.05)
+addEntity("units/badassSoldier.lua", 1096.55, 135.311, -4928.18)
+addEntity("units/badassSoldier.lua", 2898.02, 1271.57, -2524.52)
+addEntity("units/badassSoldier.lua", -2974.77, 1233.65, -2512.39)
+addEntity("units/crate.lua", 826.705, 56.7915, -430.121)
+addPowerUp("Health", -475.44, 37.7727, -728.798)
+addPowerUp("Health", -305.824, 37.7727, -770.066)
+addPowerUp("RocketLauncherAmmo", -465.515, 37.7727, -896.827)
+addEntity("units/crate.lua", -597.498, -2.44601, -1036.79)
+addPowerUp("Health", -626.177, 14.4672, -768.974)

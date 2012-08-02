@@ -1,0 +1,129 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG19622.mp3")
+
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level4_part1_collision.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level4_part1_a.x","noShadowMap")
+addRenderable("lev/level4_part1_b.x","shadowMap1")
+addRenderable("lev/level4_part1_c.x","shadowMap2")
+planespaceBaker("noShadowMap")
+planespaceBaker("shadowMap1")
+planespaceBaker("shadowMap2")
+
+renderScript  = "lev/level4_part1_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+--
+-- TRIGGERS
+--
+addTrigger(0, 'startNewGame("lev/level4_part2_loadscript.lev", 3)', -4450, 1000, -3550, 1900)
+
+--5.607
+--4
+--3.9
+--3.42
+--3.519
+--2
+
+addTrigger(1, 'playSpeech("media/sounds/dialog/dialog_3.mp3")', 2)
+
+function doSpeechSequence()
+	startSpeechSequence(
+		"Alex", "Alexander:  Site Alpha is clear.  For all this base is \n" ..
+		        "cracked up to be, there are surprisingly few mutants here.", 5.607, 0.05, 0.6, 
+
+		"Selena", "Selena:  Are you joking?  This place is crawling! I must \n" ..
+		          "have neutralized a dozen!", 4, 0.05, 0.6, 
+
+		"Alex", "Alexander:  Not where I'm standing.  It's all clear, for \n" ..
+		        "at least five miles.", 3.9, 0.05, 0.6, 
+
+		"Selena", "Selena:  Then rendezvous with Tyrell and me in the old \n" ..
+		          "tunnels at 0300.", 3.519, 0.05, 0.6, 
+
+		"Alex", "Alexander:  Roger that.  Right after I call in the nukes on this \n" ..
+		        "mutant dump.", 3.509, 0.05, 0.6);
+
+    setOnSpeechFinished("shakeScreen(0.3, 4)")
+end
+
+addTrigger(1, "doSpeechSequence()", 2)
+--addTrigger(1, 'freezeEntities(22)',2)
+
+--
+-- Lights
+--
+lightX = 0
+lightY = 1000
+lightZ = -2450
+
+ambientR = 0.2
+ambientG = 0.2
+ambientB = 0.2
+
+--
+-- LEVEL MATERIALS
+--
+asphalt = 0
+caution = 1
+cementFill1 = 2
+cementFill2 = 3
+chainlink = 4
+metalOne = 5 
+metalTwo = 6
+moonRock = 7
+plating = 8
+windows = 9
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+--
+-- BAD GUYS
+-- 
+
+addEntity("units/crate.lua", 74.396, 178.027, -1143.26) 
+addEntity("units/crate.lua", -65.889, 177.915, -711.649) 
+addEntity("units/crate.lua", 1014.95, -1.74292, -854.864) 
+--addEntity("units/toughSoldier.lua", -167.492, -299.897, -3474.31) 
+addEntity("units/toughSoldier.lua", -2632.24, -27.8139, -5037.3) 
+addEntity("units/toughImp.lua", -2108.1, -27.8139, -5081.86) 
+addEntity("units/toughImp.lua", -2269.03, 169.724, -4003.97) 
+addEntity("units/toughImp.lua", -1952.31, 169.724, -4049.8) 
+--addEntity("units/toughElite.lua", -2926.84, -275.159, -4568.47) 
+addEntity("units/toughSoldier.lua", -4452.02, -5.5036, -5133.93) 
+addEntity("units/toughImp.lua", -4040.26, -621.658, -2149.28) 
+addEntity("units/toughImp.lua", -3825.09, -621.658, -2148.9) 
+addEntity("units/toughSoldier.lua", -3760.16, -621.658, -906.433) 
+addEntity("units/toughSoldier.lua", -4164.91, -621.658, -907.154) 
+addEntity("units/crate.lua", -3018.3, -630.123, -344.64) 
+addEntity("units/crate.lua", -2933.42, -630.123, 101.179) 
+addEntity("units/crate.lua", -2745.54, -630.123, -305.397) 
+addEntity("units/toughElite.lua", -3991.36, -826.498, 1293.71)
+--addEntity("units/toughImp.lua", 152.176, -275.918, -2472.29) 
+--addEntity("units/toughImp.lua", 493.889, -275.918, -2690.39) 
+--addEntity("units/toughSoldier.lua", -323.998, -19.0164, -4101.99)
+addEntity("units/toughImp.lua", -3263.85, -689.319, -334.253)
+addEntity("units/toughImp.lua", -3993.47, -591.142, -3075.5)

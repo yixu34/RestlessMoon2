@@ -1,0 +1,166 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level1.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level1.x","levelGeometry")
+planespaceBaker("levelGeometry")
+
+renderScript  = "lev/level1_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+--
+-- MUSIC
+--
+playMusic("media/music/Restless Music 2 Flawed.mp3")
+
+--
+-- Lights
+--
+lightX = 8000
+lightY = 12000
+lightZ = -1400
+
+ambientR = 0.3
+ambientG = 0.3
+ambientB = 0.3
+
+--
+-- PARTICLES
+--
+emitParticlesAt("explosions",-240,200,-1000,6)
+emitParticlesAt("explosions",-1050,300,-1000,3)
+emitParticlesAt("explosions",-850,-200,-900,3)
+emitParticlesAt("explosions",600,1250,-900,3)
+emitParticlesAt("explosions",-600,150,-1450,18)
+emitParticlesAt("sparks",-500,-300,-850,3)
+emitParticlesAt("sparks",600,1100,-900,3)
+
+--
+-- TRIGGERS
+--
+addTrigger(0, 'startNewGame("lev/level2_loadscript.lev", 3)', 16700, -7400, 18000, -6800)
+
+function doSpeechSequence()
+	startSpeechSequence(
+		"Tyrell", "Tyrell:  Lieutenant, come in.  What is your status?", 2.398, 0.05, 0.6,
+
+		"Selena", "Selena:  My pod is lost, probably an infrared missile.  Currently \n" .. 
+		"on foot at 155.43 by 230.30 bearing lunar East.", 6.602, 0.05, 0.6,
+
+		"Tyrell", "Tyrell:  Satellites show no enemy movement in your vicinity.", 2.91, 0.05, 0.6,
+
+		"Selena", "Selena:  Then who just shot me down?!?", 1.895, 0.05, 0.6,
+
+		"Tyrell", "Tyrell:  No word on that yet, but you are off target.  Meet me in \n" .. 
+		"Alpha colony's tunnels at 0300 hours.", 5.489, 0.05, 0.6,
+
+		"Selena", "Selena:  Roger.  Over and out.", 1.513, 0.05, 0.6);
+end
+
+addTrigger(1, "doSpeechSequence()", 2)
+addTrigger(1, 'playSpeech("media/sounds/dialog/dialog_1.mp3")', 2)
+--addTrigger(1, 'freezeEntities(23)',2)
+
+--
+-- LEVEL MATERIALS
+--
+planeCap = 0
+cementFill1 = 1
+cementFill2 = 2
+cementFill3 = 3
+planeDamage = 4
+planeEngine = 5
+planeFuselage = 6
+planeGuns = 7
+metalOne = 8
+metalTwo = 9
+moonRock = 10
+plating = 11
+shelfing = 12
+planeStripe = 13
+windows = 14
+planeWindshield = 15
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+--
+-- BAD GUYS
+-- 
+
+addEntity("units/crate.lua", 7438.45, -445.998, -3275.12) 
+addEntity("units/crate.lua", 7843.15, -446.159, -1979.82) 
+addEntity("units/crate.lua", 6464.78, -444.411, -2686.3) 
+impA = addEntity("units/imp.lua", 7300, -387.785, -1900) 
+impB = addEntity("units/imp.lua", 6600, -630.685, -3960) 
+addEntity("units/airship.lua", 11550.7, -1034.835, -4646.48) 
+addPowerUp("ShotGunAmmo", 7460.71, -410.337, 843.983) 
+addEntity("units/crate.lua", 7766.36, -410.337, 950.277) 
+addEntity("units/crate.lua", 5857.81, -414.209, -4537.9) 
+addEntity("units/crate.lua", 12006.8, -840.552, -4016.09) 
+addEntity("units/crate.lua", 12262.9, -840.552, -4035.31) 
+addEntity("units/crate.lua", 12162.3, -840.552, -4180.43) 
+addEntity("units/imp.lua", 17234.8, -421.951, -6591.86) 
+addEntity("units/crate.lua", 3617.49, -1032.27, -1824.85) 
+addEntity("units/crate.lua", 3910.92, -1007.13, -1810.22) 
+addEntity("units/crate.lua", 5978.68, -442.942, -1867.13)
+
+sol1 = addEntity("units/soldier.lua", 11800, -886.911, -4000)
+sol2 = addEntity("units/soldier.lua", 11800, -866.442, -3800)
+sol3 = addEntity("units/soldier.lua", 11500, -846.999, -3800)
+sol4 = addEntity("units/soldier.lua", 11500, -850.707, -4000)
+imp1 = addEntity("units/imp.lua", 10520.2, -832.495, -3663.84)
+
+wp1 = addWayPoint(11250,-830,-4000)
+wp2 = addWayPoint(10600,-830,-3500)
+wp3 = addWayPoint(10600,-830,-4000)
+
+function patrol1()
+setPath(imp1,wp2,wp3,wp1,'patrol1()')
+end
+
+patrol1()
+
+imp2 = addEntity("units/imp.lua", 12864, -815.964, -4337)
+wp21 = addWayPoint(13350,-830,-5050)
+wp22 = addWayPoint(13300,-830,-3050)
+
+function patrol2()
+setPath(imp2,wp21,wp22,'patrol2()')
+end
+patrol2()	
+
+wp31 = addWayPoint(7800, -387.785, -1800)
+wp32 = addWayPoint(7500, -387.785, -1400)
+
+function patrol3()
+setPath(impA,wp31,wp32,'patrol3()')
+end
+patrol3()
+
+wp41 = addWayPoint(7500, -387.785, -4000)
+wp42 = addWayPoint(7500, -387.785, -3500)
+
+function patrol4()
+setPath(impB,wp41,wp42,'patrol4()')
+end
+patrol4()
+
+addEntity("units/crate.lua", 6392.63, 1264.83, -4924.18)

@@ -1,0 +1,105 @@
+--We need to add in the weapons at the begning of the level (this makes me cry)
+dofile("units/weapons.lua")
+dofile("units/powerups.lua")
+
+set("AIEnabled",1)
+
+--
+-- COLLISION GEOMETRY
+--
+
+addCollisionGeometry("lev/level6.x")
+
+--
+-- RENDERING GEOMETRY
+--
+addRenderable("lev/level6.x","levelGeometry")
+planespaceBaker("levelGeometry")
+
+renderScript  = "lev/level6_renderscript.lua"
+
+--
+-- SKYBOX
+--
+skybox        = "media/mdl_etc_skybox.x"
+
+
+--
+-- MUSIC
+--
+playMusic("media/music/NG19622.mp3")
+
+--
+-- TRIGGERS
+--
+-- play some kick-ass music when you first fight the airship
+addTrigger(0, 'playMusicOnce("media/music/cardamar_farsidemoon.mp3")', -700, -2000, 700, -1000)
+addTrigger(0, 'startNewGame("lev/level7_loadscript.lev", 3)', -30207, 1382, -29589, 1143)
+
+--
+-- Lights
+--
+lightX = 0
+lightY = 8000
+lightZ = -4000
+
+ambientR = 0.32
+ambientG = 0.3
+ambientB = 0.25
+
+--
+-- TRIGGERS
+--
+
+--
+-- LEVEL MATERIALS
+--
+asphalt = 0
+cementFill1 = 1
+cementFill2 = 2
+concreteFill1 = 3
+concreteFill2 = 4
+metalOne = 5 
+metalTwo = 6
+plating = 7
+windows = 8
+
+--
+-- Have not cached yet
+--
+haveCached = false
+
+--
+-- BAD GUYS
+--
+addEntity("units/airship.lua", -6542.97, -300.237, -4539.74)
+addEntity("units/airship.lua", -26540.1, -1660.09, -1136.02)
+addEntity("units/airship.lua", -25694.3, -1660.27, 954.151)
+addPowerUp("RocketLauncherAmmo", -468.325, 196.978, -256.369)
+addPowerUp("RocketLauncherAmmo", -561.907, 92.3524, -557.463)
+addEntity("units/crate.lua", -552.739, 92.3524, 263.511)
+addEntity("units/crate.lua", -570.798, 96.0821, -908.221)
+addEntity("units/crate.lua", -20556.1, -1904.7, -1809.26)
+addEntity("units/crate.lua", -7768.25, 107.169, -7925.12)
+addEntity("units/crate.lua", -3639.77, 92.3523, -8134.09)
+addPowerUp("RocketLauncherAmmo", -5190.06, 134.571, -7913.95)
+addPowerUp("RocketLauncherAmmo", -6011.02, 134.571, -7869.82)
+addPowerUp("RocketLauncherAmmo", -6905.62, 134.571, -7821.73)
+addEntity("units/crate.lua", -13944.5, 116.371, -2728.39)
+addEntity("units/toughImp.lua", -15317.7, 438.003, -2107)
+addEntity("units/toughImp.lua", -17332.1, 78.4628, -3173.33)
+addEntity("units/toughImp.lua", -17434.1, 77.7455, -3476.4)
+addEntity("units/toughSoldier.lua", -20057.8, -648.425, -5354)
+addEntity("units/crate.lua", -21063.1, -653.588, -4511.34)
+addEntity("units/crate.lua", -21098.3, -651.217, -2137.86)
+addEntity("units/crate.lua", -21132, -637.009, -3073.53)
+addPowerUp("RocketLauncherAmmo", -23633.2, -978.875, 263.978)
+addEntity("units/crate.lua", -21899.2, -663.436, -1165.61)
+addEntity("units/crate.lua", -21898.1, -663.436, -1371.88)
+addEntity("units/crate.lua", -21896.9, -663.436, -1583.44)
+addEntity("units/toughImp.lua", -19489.3, -1911.68, -1479.32)
+
+addEntity("units/badassImp.lua", -19747.2, -1888.08, -508.432)
+addEntity("units/badassImp.lua", -19679.1, -1883.63, -2545.37)
+addEntity("units/toughElite.lua", -21004.4, -634.827, -2578.7)
+addEntity("units/badassImp.lua", -30138.5, -1249.94, -4840.16)
